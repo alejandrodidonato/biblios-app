@@ -5,14 +5,14 @@ const appTheme = createTheme({
     typography: {
         fontFamily: 'Poppins',
         h1: {
-          fontFamily: 'Avenir',
-          fontSize: '32px',
-          fontWeight: 700,
+          fontFamily: 'Avenir Black',
+          fontSize: '36px',
+          fontWeight: 800,
         },
         h2: {
           fontFamily: 'Avenir',
-          fontSize: '16px',
-          fontWeight: 500,
+          fontSize: '18px',
+          fontWeight: 400,
         },
         subtitle2: {
           fontFamily: 'Poppins',
@@ -27,7 +27,7 @@ const appTheme = createTheme({
             main: '#779A4A',
             dark: '#425D07',
             light: '#8D6542',
-            background: '#779a4a80',
+            background: '#f4f2e9',
             contrastText: '#FFFFFF'
         },
       },
@@ -35,36 +35,36 @@ const appTheme = createTheme({
         MuiCssBaseline: {
           styleOverrides: {
               body: {
-                  backgroundColor: '#f4f2e9', // Color de fondo del body
+                  backgroundColor: '#f4f2e9',
               },
               '@font-face': [
                   {
-                      fontFamily: 'Avenir',
-                      src: "url('fonts/AvenirNextCyr-Heavy.woff') format('woff')",
+                      fontFamily: 'Avenir Black',
+                      src: "url('fonts/AvenirBlack.ttf') format('ttf')",
                       fontWeight: 800,
                       fontStyle: 'normal',
                   },
                   {
-                      fontFamily: 'Avenir',
-                      src: "url('fonts/AvenirNextCyr-Bold.woff') format('woff')",
+                      fontFamily: 'Avenir Heavy',
+                      src: "url('fonts/AvenirBold.ttf') format('ttf')",
                       fontWeight: 700,
                       fontStyle: 'normal',
                   },
                   {
-                      fontFamily: 'Avenir',
-                      src: "url('fonts/AvenirNextCyr-Medium.woff') format('woff')",
+                      fontFamily: 'Avenir Medium',
+                      src: "url('fonts/AvenirMedium.ttf') format('ttf')",
                       fontWeight: 500,
                       fontStyle: 'normal',
                   },
                   {
                       fontFamily: 'Avenir',
-                      src: "url('fonts/AvenirNextCyr-Regular.woff') format('woff')",
+                      src: "url('fonts/AvenirRegular.ttf') format('ttf')",
                       fontWeight: 400,
                       fontStyle: 'normal',
                   },
                   {
-                      fontFamily: 'Avenir',
-                      src: "url('fonts/AvenirNextCyr-Light.woff') format('woff')",
+                      fontFamily: 'Avenir Light',
+                      src: "url('fonts/AvenirLight.ttf') format('ttf')",
                       fontWeight: 300,
                       fontStyle: 'normal',
                   }

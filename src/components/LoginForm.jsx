@@ -5,7 +5,6 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
-import appTheme from '../theme';
 import supabaseClient from '../supabase.js'
 
 
@@ -92,7 +91,7 @@ const LoginForm = () => {
                     maxWidth: '400px',
                     margin: '0 auto',
                     padding: '1rem',
-                    flexGrow: 1,
+                    flexGrow: 2,
                     display: 'flex',
                     justifyContent: 'center',
                 }}
@@ -134,7 +133,7 @@ const LoginForm = () => {
                     </Box>
 
                     <Box>
-                    <Typography align="center" variant="subtitle2" color="primary.dark">
+                    <Typography align="center" variant="subtitle2" color="primary.dark" mt={4}>
                         ¿No tenés una cuenta? <Link component={RouterLink} color="primary.dark" fontWeight={700} to="/register">Registrate</Link>
                     </Typography>
                     </Box>
