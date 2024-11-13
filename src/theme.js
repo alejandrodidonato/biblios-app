@@ -7,12 +7,12 @@ const appTheme = createTheme({
         h1: {
           fontFamily: 'Avenir',
           fontSize: '32px',
-          fontWeight: 800,
+          fontWeight: 700,
         },
         h2: {
           fontFamily: 'Avenir',
           fontSize: '16px',
-          fontWeight: 800,
+          fontWeight: 500,
         },
         subtitle2: {
           fontFamily: 'Poppins',
@@ -33,45 +33,44 @@ const appTheme = createTheme({
       },
       components: {
         MuiCssBaseline: {
-          styleOverrides: `
-
-          @font-face {
-            font-family: 'Avenir';
-            src: url(fonts/AvenirNextCyr-Heavy.woff) format('woff'); 
-            weight: 800;
-            font-style: normal;
-          }
-          
-          @font-face {
-            font-family: 'Avenir';
-            src: url(fonts/AvenirNextCyr-Bold.woff) format('woff'); 
-            weight: 700;
-            font-style: normal;
-          }
-          
-          @font-face {
-            font-family: 'Avenir';
-            src: url(fonts/AvenirNextCyr-Medium.woff) format('woff'); 
-            weight: 500;
-            font-style: normal;
-          }
-          
-          @font-face {
-            font-family: 'Avenir';
-            src: url(fonts/AvenirNextCyr-Regular.woff) format('woff'); 
-            weight: 400;
-            font-style: normal;
-          }
-          
-          @font-face {
-            font-family: 'Avenir';
-            src: url(fonts/AvenirNextCyr-Light.woff) format('woff'); 
-            weight: 300;
-            font-style: normal;
-          }
-          
-          `,
-        },
+          styleOverrides: {
+              body: {
+                  backgroundColor: '#f4f2e9', // Color de fondo del body
+              },
+              '@font-face': [
+                  {
+                      fontFamily: 'Avenir',
+                      src: "url('fonts/AvenirNextCyr-Heavy.woff') format('woff')",
+                      fontWeight: 800,
+                      fontStyle: 'normal',
+                  },
+                  {
+                      fontFamily: 'Avenir',
+                      src: "url('fonts/AvenirNextCyr-Bold.woff') format('woff')",
+                      fontWeight: 700,
+                      fontStyle: 'normal',
+                  },
+                  {
+                      fontFamily: 'Avenir',
+                      src: "url('fonts/AvenirNextCyr-Medium.woff') format('woff')",
+                      fontWeight: 500,
+                      fontStyle: 'normal',
+                  },
+                  {
+                      fontFamily: 'Avenir',
+                      src: "url('fonts/AvenirNextCyr-Regular.woff') format('woff')",
+                      fontWeight: 400,
+                      fontStyle: 'normal',
+                  },
+                  {
+                      fontFamily: 'Avenir',
+                      src: "url('fonts/AvenirNextCyr-Light.woff') format('woff')",
+                      fontWeight: 300,
+                      fontStyle: 'normal',
+                  }
+              ]
+          },
+      },
         MuiInputBase: {
           styleOverrides: {
             root: {

@@ -9,29 +9,20 @@ import Loading from './Loading';
 
 const Book = () => {
 
-  const { getBookById, bookDetails, loading } = useApi()
+  const { loading } = useApi()
 
   const { id } = useParams()
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    
-    getBookById(id);
-
-  }, [id]);
-
-  
 
   return (
         <>
         {
           loading ? <Loading /> :
 
-          <Container fluid className="my-4 mx-1 book-info">
+          <Container className="fluid my-4 mx-1 book-info">
             <Box className="justify-content-center">
               <Grid className='mx-1'>
-                <h1 className='book-title'>{ bookDetails.volumeInfo.title }</h1>
+                <h1 className='book-title'></h1>
                 <h2 className='book-author'></h2>
                 <h3 className='book-year'></h3>
                 <h4 className='book-publisher'></h4>

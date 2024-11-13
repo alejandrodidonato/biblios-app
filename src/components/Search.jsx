@@ -6,7 +6,7 @@ import { Container, Grid, Card, CardMedia, CardContent, Typography } from '@mui/
 
 const Search = () => {
 
-    const { bookData, loading } = useApi()
+    const { bookData, loading, selectBook } = useApi()
 
     const cardBook = {
       height: '240px',
@@ -14,7 +14,6 @@ const Search = () => {
       borderRadius: '0',
     
     }
-
 
   return (
         <>
@@ -24,7 +23,7 @@ const Search = () => {
              <Grid ml="auto" mr="auto" mb="6rem" container spacing={1} >
                {Array.from(bookData).map((item, index) => (
                  <Grid item key={index} xs={6} sm={4} md={3} lg={2}>
-                     <Link to={`../book/${item.id}`}>
+                     <Link to={`../book/${item.id}`} >
                        <Card sx={cardBook}>
                          <CardMedia
                            component="img"

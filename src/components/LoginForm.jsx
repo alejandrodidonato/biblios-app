@@ -56,7 +56,7 @@ const LoginForm = () => {
                     setErrorMessage("Email o contraseña incorrectos.")
                   break;
                   case 'Email not confirmed':
-                    setErrorMessage("Por favor, verificá tu email para poder ingresar.")
+                    setErrorMessage("Por favor, revisá tu casilla de email para poder verificar tu usuario.")
                     const { data, error } = await supabaseClient.auth.resend({
                         type: 'signup',
                         email: user.email
@@ -84,83 +84,76 @@ const LoginForm = () => {
   return (
         <>
         {   
-            <Stack direction="column" sx={{
+            <Stack
+                direction="column"
+                spacing={2}
+                sx={{
+                    width: '100%',
+                    maxWidth: '400px',
+                    margin: '0 auto',
+                    padding: '1rem',
+                    flexGrow: 1,
                     display: 'flex',
-                    alignItems: 'center',
-                }}>
-                <form onSubmit={handleSubmit}>
-                    <Box sx={{
-                            margin: '2rem auto',
-                            padding: '1rem',
-                        }}>
-
-                        <FormControl variant="standard" sx={{
-                            width: '100%',
-                            paddingBottom: '2rem',
-                        }}  >
-                        <InputLabel sx={{
-                            fontSize: '14px',
-                            color: appTheme.palette.primary.main,
-                        
-                        }} htmlFor="email">Email</InputLabel>
+                    justifyContent: 'center',
+                }}
+            >
+                 <form onSubmit={handleSubmit}>
+                    <Box sx={{ padding: '1rem' }}>
+                    <FormControl variant="standard" sx={{ width: '100%', paddingBottom: '2rem' }}>
+                        <InputLabel sx={{ fontSize: '14px', color: 'primary.main' }} htmlFor="email">Email</InputLabel>
+                        <Input id="email" type="text" onChange={dataUser} name="email" />
+                    </FormControl>
+                    
+                    <FormControl sx={{ width: '100%' }} variant="standard">
+                        <InputLabel sx={{ fontSize: '14px', color: 'primary.main' }} htmlFor="password">Contraseña</InputLabel>
                         <Input
-                            id="email"
-                            type="text"
-                            onChange={dataUser}
-                            name="email"
-                        />
-                        </FormControl>
-                        <FormControl sx={{ width: '100%' }} variant="standard" >
-                        <InputLabel sx={{
-                            fontSize: '14px',
-                            color: appTheme.palette.primary.main,
-                        
-                        }} htmlFor="password">Contraseña</InputLabel>
-                        <Input
-                            id="password"
-                            name="password"
-                            type={showPassword ? 'text' : 'password'}
-                            endAdornment={
+                        id="password"
+                        name="password"
+                        type={showPassword ? 'text' : 'password'}
+                        endAdornment={
                             <InputAdornment position="end">
-                                <IconButton
+                            <IconButton
                                 aria-label="toggle password visibility"
                                 onClick={handleClickShowPassword}
                                 onMouseDown={handleMouseDownPassword}
                                 color="primary"
-                                >
+                            >
                                 {showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
+                            </IconButton>
                             </InputAdornment>
-                            }
-                            onChange={dataUser}
+                        }
+                        onChange={dataUser}
                         />
-                        </FormControl>
-                        
-                        {errorMessage && (
-                        <Alert severity="error" icon={false} sx={{
-                            marginTop: '20px'
-                        }}  >
-                            <AlertTitle sx={{
-                            fontSize: '12px'
-                        }}>{errorMessage}</AlertTitle>
+                    </FormControl>
+                    
+                    {errorMessage && (
+                        <Alert severity="error" icon={false} sx={{ marginTop: '20px' }}>
+                        <AlertTitle sx={{ fontSize: '12px' }}>{errorMessage}</AlertTitle>
                         </Alert>
-                        )}
+                    )}
                     </Box>
+
                     <Box>
-                        <Typography align="center" variant='subtitle2' color="primary.dark">¿No tenés una cuenta? <Link component={RouterLink} color="primary.dark" fontWeight={700} to="/register" >Registrate</Link></Typography>
-                        
-                        
+                    <Typography align="center" variant="subtitle2" color="primary.dark">
+                        ¿No tenés una cuenta? <Link component={RouterLink} color="primary.dark" fontWeight={700} to="/register">Registrate</Link>
+                    </Typography>
                     </Box>
                     
-                    <Button variant="contained" sx={{
+                    <Button
+                    variant="contained"
+                    sx={{
                         textTransform: 'capitalize',
                         fontSize: '18px',
                         fontFamily: 'Poppins',
                         fontWeight: 700,
                         width: '100%',
                         marginTop: '3rem',
-                        marginBottom: '1rem'
-                    }} type="submit">Ingresar</Button>
+                        marginBottom: '1rem',
+                    }}
+                    type="submit"
+                    >
+                    Ingresar
+                    </Button>
                 </form>
                 
             </Stack>            

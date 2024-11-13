@@ -12,8 +12,7 @@ const ApiProvider = ({children}) => {
 
     const [loading, setLoading] = useState(false)
     const [bookData, setBookData] = useState([])
-    const [bookDetails, setBookDetails] = useState({})
-    
+
 
     const getBookList = async datos => {
        
@@ -51,31 +50,6 @@ const ApiProvider = ({children}) => {
         }       
     }
     
-    const getBookById = async (bookId) => {
-        setLoading(true);
-      
-        try {
-          const url = `https://www.googleapis.com/books/v1/volumes/${bookId}?key=${process.env.REACT_APP_GOOGLE_BOOKS_API_KEY}`;
-          const { data: book } = await axios(url);
-      
-          if (book && book.volumeInfo) {
-            if (!areBookDetailsEqual(bookDetails, book)) {
-              setBookDetails(book);
-            }
-          }
-      
-        } catch (error) {
-          console.error('Error al obtener detalles del libro:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      
-      const areBookDetailsEqual = (bookDetails1, bookDetails2) => {
-        return (
-          bookDetails1.id === bookDetails2.id
-        );
-      };
 
     const clearBookList = () => {
         setBookData([]);
@@ -85,7 +59,7 @@ const ApiProvider = ({children}) => {
 
 
     return (
-        <ApiContext.Provider value={{ getBookList, clearBookList, bookData, search, setSearch, loading, setLoading, getBookById, bookDetails }}>
+        <ApiContext.Provider value={{ getBookList, clearBookList, bookData, search, setSearch, loading, setLoading }}>
             {children}
         </ApiContext.Provider>
     )
