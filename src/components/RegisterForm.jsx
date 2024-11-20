@@ -63,16 +63,14 @@ const RegisterForm = () => {
       
         try {
           // Verificar si el correo electrónico ya está registrado en Supabase
-          const { data: existingUsers, error: getUserError } = await supabaseClient.from('profiles').select('id').eq('username', user.email);
-      
-          if (getUserError) {
-            setErrorMessage('Error al verificar el correo electrónico');
-            return;
-          }
-      
-          if (existingUsers.length > 0) {
-            setErrorMessage('Este correo electrónico ya está registrado.');
-            return;
+          const { data: existingUsers, error: existingUsersError } = await supabaseClient
+              .from('users')
+              .select('id')
+              .eq('email', user.email);
+
+          if (existingUsers && existingUsers.length > 0) {
+              setErrorMessage('Ya existe un usuario registrado con este correo electrónico.');
+              return;
           }
       
           setErrorMessage('');
