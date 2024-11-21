@@ -47,71 +47,54 @@ const RegisterForm = () => {
     // Función para el manejo del envío del formulario
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setErrorMessage('');
-        setSuccessMessage('');
-      
-        if (user.password === '' || user.email === '' || !repeatPassword) {
-          setErrorMessage("Por favor, completa todos los campos.");
-          return;
-        }
-      
-        if (user.password !== repeatPassword) {
-          setErrorMessage('Las contraseñas no coinciden');
-          return;
-        }
-      
-        try {
-          // Verificar si el correo electrónico ya está registrado en Supabase
-          const { data: existingUsers, error: existingUsersError } = await supabaseClient
-              .from('users')
-              .select('id')
-              .eq('email', user.email);
-
-          if (existingUsers && existingUsers.length > 0) {
-              setErrorMessage('Ya existe un usuario registrado con este correo electrónico.');
-              return;
-          }
-      
-          setErrorMessage('');
-      
-          const { data, error } = await supabaseClient.auth.signUp(user);
-          
-      
-          if (error) {
-            switch (error.message) {
-              case 'Password should be at least 6 characters':
-                setErrorMessage('La contraseña debe tener al menos 6 caracteres.');
-                break;
-              case 'Validation failed':
-                setErrorMessage('Revisa los datos e inténtalo nuevamente.');
-                break;
-                case 'Unique constraint violation':
-                setErrorMessage('El email ya está registrado.');
-                break;
-                case 'Network error':
-                setErrorMessage('Error en la red. Volvé a intentarlo en unos minutos.');
-                break;
-                case 'Unable to validate email address: invalid format':
-                setErrorMessage('El mail no es válido.');
-                break;
-              default:
-                setErrorMessage(error.message);
-                break;
-            }
-            
-          } else {
-            setSuccessMessage('¡Registro exitoso! Ahora podés iniciar sesión.');
-            setTimeout(() => {
-              navigate('/login');
-            }, 10000);
-
-          }
-          
-        } catch (error) {
-          setErrorMessage("Error en el registro.");
-        }
+      e.preventDefault();
+      setErrorMessage('');
+      setSuccessMessage('');
+    
+      if (user.password === '' || user.email === '' || !repeatPassword) {
+        setErrorMessage('Por favor, completa todos los campos.');
+        return;
       }
+    
+      if (user.password !== repeatPassword) {
+        setErrorMessage('Las contraseñas no coinciden.');
+        return;
+      }
+    
+      try {
+        // Registro de usuario con Supabase Auth
+        const { data, error } = await supabaseClient.auth.signUp({
+          email: user.email,
+          password: user.password,
+        });
+    
+        if (error) {
+          // Manejo de errores de Supabase
+          switch (error.message) {
+            case 'User already registered':
+            case 'Email already exists':
+              setErrorMessage('El correo electrónico ya está registrado.');
+              break;
+            case 'Password should be at least 6 characters':
+              setErrorMessage('La contraseña debe tener al menos 6 caracteres.');
+              break;
+            case 'Unable to validate email address: invalid format':
+              setErrorMessage('El formato del correo no es válido.');
+              break;
+            default:
+              setErrorMessage('Error al registrarte. Por favor, intenta de nuevo.');
+          }
+        } else {
+          // Registro exitoso
+          setSuccessMessage('¡Registro exitoso! Ahora podés iniciar sesión.');
+          setTimeout(() => {
+            navigate('/login');
+          }, 3000);
+        }
+      } catch (error) {
+        setErrorMessage('Error en el registro. Por favor, intenta más tarde.');
+      }
+    };
 
   return (
         <>
@@ -176,6 +159,18 @@ const RegisterForm = () => {
                             id="password-confirm"
                             name="password-confirm"
                             type={showPassword ? 'text' : 'password'}
+                            endAdornment={
+                              <InputAdornment position="end">
+                                  <IconButton
+                                  aria-label="toggle password visibility"
+                                  onClick={handleClickShowPassword}
+                                  onMouseDown={handleMouseDownPassword}
+                                  color="primary"
+                                  >
+                                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                                  </IconButton>
+                              </InputAdornment>
+                              }
                             onChange={(e) => setRepeatPassword(e.target.value)}
                         />
                         </FormControl>
