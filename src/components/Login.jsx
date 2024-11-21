@@ -46,8 +46,8 @@ const Login = () => {
                   }}>
                     
                     <Logo src="../img/logo-register-login.png" alt="Logo de Biblios" />
-                    <Typography lineHeight={1.7} color="primary.dark" align='center' variant="h1">¡Hola de nuevo!</Typography>
-                    <Typography lineHeight={1.3} color="primary.dark" align='center' variant="h2" mt={1}>Ingresá con tu usuario y contraseña</Typography>
+                    <Typography lineHeight={1.2} color="primary.dark" align='center' variant="h1" pt={3} >¡Hola de nuevo!</Typography>
+                    <Typography lineHeight={1.3} color="primary.dark" align='center' variant="h2" mt={0}>Ingresá con tu usuario y contraseña</Typography>
                     <Box mt="auto"  sx={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
                         <LoginForm />
                     </Box>
