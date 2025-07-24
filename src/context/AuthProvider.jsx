@@ -1,42 +1,66 @@
 import { useState, createContext, useEffect } from 'react';
-import supabaseClient from '../supabase.js'
+import supabaseClient from '../supabase.js';
 
 const AuthContext = createContext();
 
+const AuthProvider = ({ children }) => {
+  const [session, setSession] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-const AuthProvider = ({children}) => {
-    
+  // Registro del usuario, creación del perfil y login inmediato
+  const register = async ({ email, password }) => {
+    // signup en Auth
+    const { data: signUpData, error: signUpError } =
+      await supabaseClient.auth.signUp({ email, password });
 
-   
-    const [session, setSession] = useState(null);
-    const [loading, setLoading] = useState(true);
+    if (signUpError) throw signUpError;
 
-    const logOut = () => supabaseClient.auth.signOut()
+    // si no hay sesión, hacemos login inmediato
+    if (!signUpData.session) {
+      const { data: signInData, error: signInError } =
+        await supabaseClient.auth.signInWithPassword({ email, password });
+      if (signInError) throw signInError;
+      setSession(signInData.session);
+    } else {
+      setSession(signUpData.session);
+    }
 
+    // 3) insert en profiles
+    const userId = signUpData.user.id;
+    const { error: profileError } = await supabaseClient
+      .from('profiles')
+      .insert([{ id: userId }]);
 
-    useEffect(() => {
-      supabaseClient.auth.getSession().then(({ data: { session } }) => {
-        setSession(session)
-        setLoading(false)
-      })
+    if (profileError) throw profileError;
 
-      const {
-        data: { subscription },
-      } = supabaseClient.auth.onAuthStateChange((_event, session) => {
-        setSession(session)
-      })
+    return signUpData;
+  };
 
-      return () => subscription.unsubscribe()
-    }, [])
-   
+  const logOut = () => supabaseClient.auth.signOut();
 
-    return (
-        <AuthContext.Provider value={{ session, logOut, loading, setSession }}>
-            {children}
-        </AuthContext.Provider>
-    )
-}
+  useEffect(() => {
+    supabaseClient.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setLoading(false);
+    });
 
-export { AuthProvider }
+    const {
+      data: { subscription },
+    } = supabaseClient.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
 
-export default AuthContext
+    return () => subscription.unsubscribe();
+  }, []);
+
+  return (
+    <AuthContext.Provider
+      value={{ session, loading, register, logOut }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export { AuthProvider };
+export default AuthContext;
