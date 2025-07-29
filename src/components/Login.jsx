@@ -24,22 +24,26 @@ const Login = () => {
 
     const { session, loading } = useAuth()
 
+    if (loading) return <Loading />;
+    if (session) return <Navigate to="/" />;
+
   return (
         <>
-        {   
-            session != null ? <Navigate to="/" /> :
-             loading ? <Loading /> : 
+    
              <Box
              display="flex"
              flexDirection="column"
              justifyContent="space-between"
              minHeight="100vh"
-             padding={2}
+             padding={1}
             >
-                <Trama src="../img/trama.svg" alt="Trama de Biblios" />
-                <Stack spacing={2} alignItems="center"
+                <Stack spacing={2} alignItems="center" backgroundColor={appTheme.palette.background.default}
                 sx={{
                     width: '100%',
+                    maxWidth: '500px',
+                    borderRadius: '15px',
+                    margin: '0 auto',
+                    padding: '1rem',
                     flexGrow: 1,
                     display: 'flex',
                     justifyContent: 'center',
@@ -48,15 +52,12 @@ const Login = () => {
                     <Logo src="../img/logo-register-login.png" alt="Logo de Biblios" />
                     <Typography lineHeight={1.2} color="primary.dark" align='center' variant="h1" pt={3} >¡Hola de nuevo!</Typography>
                     <Typography lineHeight={1.3} color="primary.dark" align='center' variant="h2" mt={0}>Ingresá con tu usuario y contraseña</Typography>
-                    <Box mt="auto"  sx={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
-                        <LoginForm />
-                    </Box>
+                    <LoginForm />
                     
                 </Stack>
                 
             </Box>
                         
-        }
         </>
   )
 }

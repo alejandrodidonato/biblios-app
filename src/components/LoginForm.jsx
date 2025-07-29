@@ -84,20 +84,10 @@ const LoginForm = () => {
         <>
         {   
             <Stack
-                direction="column"
-                spacing={2}
-                sx={{
-                    width: '100%',
-                    maxWidth: '400px',
-                    margin: '0 auto',
-                    padding: '1rem',
-                    flexGrow: 2,
-                    display: 'flex',
-                    justifyContent: 'center',
-                }}
+                direction="column" alignItems="center"
             >
                  <form onSubmit={handleSubmit}>
-                    <Box sx={{ padding: '1rem' }}>
+                    <Box  sx={{ margin: '2rem auto', padding: '1rem', width: '100%',  maxWidth: '400px' }}>
                     <FormControl variant="standard" sx={{ width: '100%', paddingBottom: '2rem' }}>
                         <InputLabel sx={{ fontSize: '14px', color: 'primary.main' }} htmlFor="email">Email</InputLabel>
                         <Input id="email" type="text" onChange={dataUser} name="email" />

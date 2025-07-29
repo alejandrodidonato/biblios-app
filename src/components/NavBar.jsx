@@ -16,9 +16,27 @@ const NavBar = () => {
 
   const [value, setValue] = React.useState(0);
 
+  const PaperStyles = {
+    position: { xs: 'fixed', md: 'fixed' },
+    left: { xs: 0, md: 0 },
+    right: { xs: 0, md: 'auto' },
+    bottom: { xs: 0, md: 'auto' },
+    top: { xs: 'auto', md: 0 },
+    width: { xs: '100vw', md: '90px' },
+    height: { xs: '10vh', md: '100vh' },
+    zIndex: 999,
+    display: 'flex',
+    flexDirection: { xs: 'row', md: 'column' },
+    alignItems: 'center',
+    justifyContent: { xs: 'center', md: 'flex-start' },
+    backgroundColor: appTheme.palette.primary.main,
+  }
+
   const navigationStyles = {
-    height: '10vh',
-    backgroundColor: appTheme.palette.primary.background
+    width: '100%',
+    height: '100%',
+    flexDirection: { xs: 'row', md: 'column' },
+    backgroundColor: 'transparent',
   }
 
   const iconStyles = {
@@ -38,7 +56,7 @@ const NavBar = () => {
   return (
     <>
     
-          <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 999 }} elevation={3}>
+          <Paper sx={PaperStyles} elevation={3}>
           <BottomNavigation
             value={value}
             onChange={(event, newValue) => setValue(newValue)}

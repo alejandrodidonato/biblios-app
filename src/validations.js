@@ -12,5 +12,5 @@ export const registerSchema = yup.object({
   repeatPassword: yup
     .string()
     .oneOf([yup.ref('password')], 'Las contraseñas deben coincidir')
-    .required('Debes confirmar la contraseña'),
+    .required('Tenés que confirmar la contraseña'),
 });

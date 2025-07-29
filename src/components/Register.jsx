@@ -1,5 +1,4 @@
-import {React, useState } from 'react'
-import { Link, useNavigate, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth'
 import Loading from './Loading';
 import { Stack, Typography, Box } from '@mui/material'
@@ -20,55 +19,15 @@ const Logo = styled("img")({
 
 const Register = () => {
 
-    const { userAuth, dataUser, signUp, userLogin, loading, session } = useAuth()
+    const { session, loading } = useAuth();
 
-    const navigate = useNavigate()
-
-    const [error, setError ] = useState()
-
-    
-
-    const handleSubmit = async(e) => {
-
-        e.preventDefault()
-
-        setError('')
-
-        try {
-            
-            await signUp(userLogin.email, userLogin.password)
-            navigate('/')
-
-        } catch(error) {
-
-            if ( error.code === "auth/internal-error")
-            {
-                setError('Se requiere una contraseña.');
-            } else if ( error.code === "auth/email-already-in-use")
-            {
-                setError('El mail ingresado ya está siendo utilizado.');
-            } else if ( error.code === "auth/weak-password")
-            {
-                setError('La contraseña debe tener al menos 6 caractéres.');
-            } else if ( error.code === "auth/invalid-email")
-            {
-                setError('Se debe ingresar un mail válido.');
-            } else
-            {
-                setError('Se produjo un error. Volvé a intentar más tarde.');
-            }
-                
-        }
-        
-    }
+  if (loading) return <Loading />;
+  if (session) return <Navigate to="/" />;
 
 
 
   return (
         <>
-        { 
-        session != null ? <Navigate to="/" /> :
-             loading ? <Loading /> : 
              <Box
              display="flex"
              flexDirection="column"
@@ -76,7 +35,6 @@ const Register = () => {
              minHeight="100vh"
              padding={2}
             >
-                <Trama src="../img/trama.svg" alt="Trama de Biblios" />
                 <Stack spacing={2} alignItems="center"
                 sx={{
                     width: '100%',
@@ -90,7 +48,6 @@ const Register = () => {
                     <RegisterForm />
                 </Stack>
             </Box>
-        }
         </>
   )
 }
