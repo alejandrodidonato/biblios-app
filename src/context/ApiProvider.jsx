@@ -5,7 +5,7 @@ const ApiContext = createContext()
 
 const ApiProvider = ({ children }) => {
  const [search, setSearch] = useState({ query: "" });
- const [searchType, setSearchType]     = useState("title") 
+ const [searchType, setSearchType]     = useState("titulo") 
   const [loading, setLoading] = useState(false)
   const [bookData, setBookData] = useState([])
 
@@ -20,18 +20,15 @@ const ApiProvider = ({ children }) => {
 
         let qualifier
       switch (type) {
-        case "title":
+        case "titulo":
           qualifier = `intitle:"${query}"`
           break
-        case "author":
+        case "autor":
           qualifier = `inauthor:"${query}"`
           break
-        case "isbn":
+        case "ISBN":
           qualifier = `isbn:${query}`
           break
-        case "publisher":
-          qualifier = `inpublisher:${query}`
-          break  
         default:
           qualifier = `intitle:"${query}"`
       }
@@ -56,7 +53,6 @@ const ApiProvider = ({ children }) => {
       const filteredBooks = (res.items || []).filter(book => {
         const info = book.volumeInfo || {}
         return (
-          info.imageLinks &&
           info.industryIdentifiers?.some(id =>
             ["ISBN_10", "ISBN_13"].includes(id.type)
           )

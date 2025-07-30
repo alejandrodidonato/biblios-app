@@ -1,5 +1,4 @@
-import { React, useState, useEffect} from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
@@ -9,9 +8,16 @@ import Loading from './Loading';
 
 const Book = () => {
 
-  const { loading } = useApi()
+  const location = useLocation();
+  const { id } = useParams();
+  const { loading, bookData } = useApi()
 
-  const { id } = useParams()
+  // Opción 1: Si viene por state (navegación normal)
+  const book = location.state?.book
+    // Opción 2: Si el usuario recarga, busca por ID en el contexto
+    || bookData.find(b => b.id === id);
+
+  if (!book) return <div>No se encontró el libro.</div>;
 
 
   return (
@@ -22,10 +28,10 @@ const Book = () => {
           <Container className="fluid my-4 mx-1 book-info">
             <Box className="justify-content-center">
               <Grid className='mx-1'>
-                <h1 className='book-title'></h1>
-                <h2 className='book-author'></h2>
-                <h3 className='book-year'></h3>
-                <h4 className='book-publisher'></h4>
+                <h1 className='book-title'>{book.volumeInfo.title}</h1>
+                <h2 className='book-author'>{book.volumeInfo.authors?.join(', ')}</h2>
+                <h3 className='book-year'>1992</h3>
+                <h4 className='book-publisher'>{book.volumeInfo.publisher}</h4>
               </Grid>
               <Grid className='mx-1'>
           
@@ -33,7 +39,7 @@ const Book = () => {
             </Box>
             <Box className="justify-content-center mt-4">
               <Grid className='mx-1'>
-                <p className='book-description'> </p>
+                <p className='book-description'>{book.volumeInfo.description} </p>
               </Grid>
             </Box>
           
