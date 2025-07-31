@@ -1,9 +1,10 @@
 import { useState, createContext, useEffect } from 'react';
-import supabaseClient from '../supabase.js';
+import useSupabase from '../hooks/useSupabase';
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
+  const supabaseClient = useSupabase();
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +26,7 @@ const AuthProvider = ({ children }) => {
       setSession(session);
     });
     return () => subscription.unsubscribe();
-  }, []);
+  }, [supabaseClient]);
 
   return (
     <AuthContext.Provider value={{ session, loading, register, logOut }}>

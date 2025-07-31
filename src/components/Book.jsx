@@ -17,6 +17,8 @@ const Book = () => {
     // Opción 2: Si el usuario recarga, busca por ID en el contexto
     || bookData.find(b => b.id === id);
 
+  const coverUrl = location.state?.coverUrl
+
   if (!book) return <div>No se encontró el libro.</div>;
 
 
@@ -28,9 +30,10 @@ const Book = () => {
           <Container className="fluid my-4 mx-1 book-info">
             <Box className="justify-content-center">
               <Grid className='mx-1'>
+                <img src={coverUrl} alt="" />
                 <h1 className='book-title'>{book.volumeInfo.title}</h1>
                 <h2 className='book-author'>{book.volumeInfo.authors?.join(', ')}</h2>
-                <h3 className='book-year'>1992</h3>
+                <h3 className='book-year'>{book.volumeInfo.publishedDate ? book.volumeInfo.publishedDate.substring(0, 4) : ''}</h3>
                 <h4 className='book-publisher'>{book.volumeInfo.publisher}</h4>
               </Grid>
               <Grid className='mx-1'>

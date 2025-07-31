@@ -38,7 +38,7 @@ const Search = () => {
                  const thumbnail = item.volumeInfo.imageLinks?.thumbnail;
                  // 2. Portada de OpenLibrary si hay ISBN
                  const openLibraryCover = isbn
-                   ? `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`
+                   ? `https://covers.openlibrary.org/b/isbn/${isbn}.jpg`
                    : null;
                  // 3. Imagen por defecto
                  const defaultCover = '/img/default-book.png';
@@ -50,7 +50,7 @@ const Search = () => {
                    <Grid item key={index} xs={6} sm={4} md={3} lg={2} xl={1} >
                      <Link 
                       to={`../book/${item.id}`} 
-                      state={{ book: item }}>
+                      state={{ book: item, coverUrl }}>
                        <Card sx={cardBook}>
                          <CardMedia
                            component="img"

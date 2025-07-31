@@ -1,51 +1,53 @@
 import React from 'react'
 import useBook from '../hooks/useBook';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
-
-
+import { Grid, Container, Typography, Card, CardMedia } from '@mui/material';
 
 const UserBooks = () => {
-
-  const { bookData, loading, userBooks, userSearched } = useBook()
+  const { userBooks, userSearched } = useBook();
 
   return (
-        <>
-        <Container fluid className="mt-4">
-                <Row className='mb-3'>
-                  <Col>
-                    <h2 className='h2-profile'>Mi Biblioteca</h2>
-                  </Col>
-                </Row>
-                <Row xs={3} md={4} lg={6} className="g-1 justify-content-center mx-1">
-                {Array.from(userBooks).map((item,index) => (
+    <>
+      <Container maxWidth="md" sx={{ mt: 4 }}>
+        <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>
+          Mi Biblioteca
+        </Typography>
+        <Grid container spacing={2} justifyContent="center">
+          {Array.from(userBooks).map((item, index) => (
+            <Grid item xs={4} sm={3} md={2} key={index}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  image={item.image}
+                  alt={item.title || 'Libro'}
+                  sx={{ height: 140, objectFit: 'contain' }}
+                />
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
 
-                    <Col key={index}>
-                            <Card>
-                                <Card.Img variant="middle" src={item.image} />
-                            </Card>
-                    </Col>
-                ))}
-                </Row>
-            </Container>
-            <Container fluid className="mt-4">
-                <Row className='mb-3'>
-                  <Col>
-                    <h2 className='h2-profile'>Mis Buscados</h2>
-                  </Col>
-                </Row>
-                <Row xs={3} md={4} lg={6} className="g-1 justify-content-center mx-1">
-                {Array.from(userSearched).map((item,index) => (
+      <Container maxWidth="md" sx={{ mt: 4 }}>
+        <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>
+          Mis Buscados
+        </Typography>
+        <Grid container spacing={2} justifyContent="center">
+          {Array.from(userSearched).map((item, index) => (
+            <Grid item xs={4} sm={3} md={2} key={index}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  image={item.image}
+                  alt={item.title || 'Libro'}
+                  sx={{ height: 140, objectFit: 'contain' }}
+                />
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </>
+  );
+};
 
-                    <Col key={index}>
-                            <Card>
-                                <Card.Img variant="middle" src={item.image} />
-                            </Card>
-                    </Col>
-                ))}
-                </Row>
-            </Container>
-        </>
-  )
-}
-
-export default UserBooks
+export default UserBooks;
