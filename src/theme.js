@@ -14,12 +14,18 @@ const appTheme = createTheme({
       fontSize: '16px',
       fontWeight: 500,
     },
+    h3: {
+      fontFamily: 'Avenir Regular',
+      fontSize: '14px',
+      fontWeight: 700,
+    },
   },
   palette: {
     primary: {
       main: '#779A4A',
       dark: '#425D07',
       light: '#8D6542',
+      white: '#ffffff',
     },
     background: {
       default: '#f4f2e9',

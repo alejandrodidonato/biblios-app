@@ -6,6 +6,8 @@ import UserBooks from './UserBooks';
 import { Container, Box, Grid, Avatar, Typography, Button } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import Loading from './Loading';
+import appTheme from '../theme';
+import { TabsProfile } from './TabsProfile';
 
 const Profile = () => {
   const { userAuth, logOut } = useAuth();
@@ -27,30 +29,29 @@ const Profile = () => {
 
   return (
     <>
-      <Container maxWidth="sm" sx={{ textAlign: 'center', backgroundColor: 'rgba(66,93,7,0.9)', borderRadius: 3, py: 4, mt: 4 }}>
-        <Grid container spacing={2} alignItems="center" justifyContent="center">
-          <Grid item xs={12} sm={4}>
+      <Container sx={{ textAlign: 'center', backgroundColor: '#b5c69a', borderTopLeftRadius: 3, borderTopRightRadius: 3, py: 2, mt: 4 }}>
+        <Grid container alignItems="center" justifyContent="center">
+          <Grid item xs={5} md={4}>
             <Avatar
               src={profile?.avatar_url || "/img/profile-example.png"}
               alt="Foto de perfil"
-              sx={{ width: 120, height: 120, margin: '0 auto' }}
+              sx={{ width: 100, height: 100, margin: '0 auto', backgroundColor: '#ffffff', border: `5px solid #ffffff` }}
             />
           </Grid>
-          <Grid item xs={12} sm={8}>
-            <Typography variant="h2" color="white" sx={{ fontWeight: 700, mb: 2 }}>
-              {profile?.email}
-            </Typography>
+          <Grid item xs={7} md={8} sx={{ textAlign: 'left'}}>
+            <Typography variant="h3" color="white" sx={{ fontWeight: 800, mb: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+           {profile?.email}
+          </Typography>
             <Button
-              variant="contained"
-              color="primary"
-              sx={{ mr: 2, mb: { xs: 1, sm: 0 } }}
+              variant="outlined"
+              sx={{ backgroundColor: appTheme.palette.primary.white, color: appTheme.palette.primary.main, mb: { xs: 1, md: 0}, mr: { xs: 0, md: 1}, textTransform: 'none', fontWeight: 600 , fontSize: '0.7rem'}}
               onClick={() => navigate('/editar-perfil')}
             >
               Editar perfil
             </Button>
             <Button
               variant="outlined"
-              color="secondary"
+              sx={{ backgroundColor: appTheme.palette.primary.white, textTransform: 'none', fontWeight: 600, color: appTheme.palette.primary.main, fontSize: '0.7rem' }}
               onClick={handleLogout}
             >
               Cerrar sesión
@@ -59,6 +60,8 @@ const Profile = () => {
         </Grid>
       </Container>
       <Outlet />
+      <TabsProfile />
+      
       { /*
       /<UserBooks />
       */ }

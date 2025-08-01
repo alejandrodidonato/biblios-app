@@ -29,7 +29,7 @@ const NavBar = () => {
     flexDirection: { xs: 'row', md: 'column' },
     alignItems: 'center',
     justifyContent: { xs: 'center', md: 'flex-start' },
-    backgroundColor: appTheme.palette.primary.main,
+    backgroundColor: '#b5c69a',
   }
 
   const navigationStyles = {
