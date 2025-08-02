@@ -9,13 +9,13 @@ import Loading from './Loading';
 const Book = () => {
 
   const location = useLocation();
-  const { id } = useParams();
+  const { isbn } = useParams();
   const { loading, bookData } = useApi()
 
   // Opción 1: Si viene por state (navegación normal)
   const book = location.state?.book
-    // Opción 2: Si el usuario recarga, busca por ID en el contexto
-    || bookData.find(b => b.id === id);
+    // Opción 2: Si el usuario recarga, busca por ISBN en el contexto
+    || bookData.find(b => b.isbn === isbn);
 
   const coverUrl = location.state?.coverUrl
 

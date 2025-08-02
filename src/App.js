@@ -4,7 +4,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { ApiProvider } from './context/ApiProvider'
 import { AuthProvider } from './context/AuthProvider'
-import { BookProvider } from './context/BookProvider'
+import { BooksProvider } from './context/BooksProvider'
 import { SupabaseProvider } from './context/SupabaseProvider.jsx';
 import { ProfileProvider } from './context/ProfileProvider.jsx';
 import { Container, padding } from '@mui/system';
@@ -22,11 +22,11 @@ function App() {
         <AuthProvider>
           <ProfileProvider>
             <ApiProvider>  
-            <BookProvider>  
+            <BooksProvider>  
               <BrowserRouter> 
                 <AppRouter />
-                </BrowserRouter>
-            </BookProvider>
+              </BrowserRouter>
+            </BooksProvider>
             </ApiProvider>
           </ProfileProvider>
           </AuthProvider>

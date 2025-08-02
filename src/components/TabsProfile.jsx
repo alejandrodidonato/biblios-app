@@ -20,12 +20,11 @@ const TabItem = styled(Tab)(({ theme }) => ({
   },
 }));
 
-export function TabsProfile() {
-  const [tabIndex, setTabIndex] = React.useState(0);
+export function TabsProfile({ value, onChange }) {
   return (
     <Tabs
-      value={tabIndex}
-      onChange={(e, index) => setTabIndex(index)}
+      value={value}
+      onChange={onChange}
       sx={{
         width: "100%",
         borderBottomLeftRadius: "4px",

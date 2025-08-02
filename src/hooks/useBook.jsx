@@ -1,8 +1,8 @@
 import { useContext } from 'react'
-import BookContext from '../context/BookProvider'
+import BooksContext from '../context/BooksProvider'
 
-const useBook = () => {
-    return useContext(BookContext)
+const useBooks = () => {
+    return useContext(BooksContext)
 }
 
-export default useBook
+export default useBooks
