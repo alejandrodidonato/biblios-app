@@ -1,41 +1,26 @@
-
-/node_modules/
-
-
-/build/
-/dist/
-
-
+# Dependencias
+node_modules/
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.cache/
+dist/
+build/
+.vscode/
 
+# Archivos de Vercel/Netlify
+.vercel/
+.netlify/
 
-.supabase/
-supabase/migrations/
-
-
+# Logs y temporales
 npm-debug.log*
 yarn-debug.log*
-pnpm-debug.log*
+yarn-error.log*
+*.log
 
-
-/coverage/
-
-
+# Archivos del sistema
 .DS_Store
 Thumbs.db
 
-
-.vscode/
-.idea/
-
-
-/Thumbs.db
-ehthumbs.db
-
-
-/.turbo/
-/.cache/
+# Archivos grandes cacheados
+*.pack
+*.zip
+*.tar.gz
