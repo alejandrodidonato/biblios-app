@@ -30,9 +30,10 @@ export default async function handler(req, res) {
     }
 
     const result = await mercadopago.preferences.create(preference)
-    res.status(200).json({ init_point: result.body.init_point })
+
+    return res.status(200).json({ init_point: result.body.init_point })
   } catch (error) {
-    console.error('Error al crear preferencia:', error)
-    res.status(500).json({ error: 'Error al crear preferencia' })
+    console.error('❌ Error al crear preferencia:', error.message)
+    return res.status(500).json({ error: 'Error al crear preferencia' })
   }
 }

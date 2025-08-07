@@ -493,13 +493,6 @@ if (!chatRes) {
       </Box>
     </Box>
 
-    <Box sx={{ mt: 1 }}>
-      <Typography variant="body2">
-        {existingSwap.diff >= 0
-          ? `Están ofreciéndote ${existingSwap.diff} libris de más`
-          : `Te faltan ${Math.abs(existingSwap.diff)} libris`}
-      </Typography>
-    </Box>
 
     <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
       <Button

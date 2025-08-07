@@ -1,6 +1,7 @@
 // src/components/ComprarLibris.jsx
 import { Box, Button, Container, Typography, Grid, Card, CardContent } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import LibrisIcon from './LibrisIcon'
 
 const packs = [
   { id: 'pack1', cantidad: 250, precio: 5000 },
@@ -13,7 +14,7 @@ const ComprarLibris = () => {
 
   const handleCompra = async (pack) => {
     try {
-      const response = await fetch('/api/crear-preferencia', {
+      const response = await fetch('../api/crear-preferencia', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -45,9 +46,12 @@ const ComprarLibris = () => {
         {packs.map((pack) => (
           <Grid item key={pack.id}>
             <Card sx={{ minWidth: 200, p: 2, textAlign: 'center' }}>
-              <CardContent>
+                <Box display="flex" justifyContent="center" >
+                    <LibrisIcon size={40} fontSize="40px" />
+                </Box>
+              <CardContent >
                 <Typography variant="h5" gutterBottom>
-                  {pack.cantidad} Libris
+                {pack.cantidad} Libris
                 </Typography>
                 <Typography variant="body1">${pack.precio}</Typography>
                 <Button

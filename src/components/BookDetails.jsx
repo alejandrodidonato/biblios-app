@@ -4,7 +4,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
-import { Stack, Box } from '@mui/material'
+import { Stack, Box, Typography } from '@mui/material'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import supabaseClient from '../supabase.js'
 import Loading from './Loading'
@@ -149,64 +149,87 @@ const BookDetails = () => {
     }
   }
 
-  return (
-    <>
-      <Container className="fluid my-4 mx-1 book-info">
-        <Box className="justify-content-center">
-          <Grid className="mx-1">
-            <img src={coverUrl} alt="" />
-            <h1 className="book-title">{book.volumeInfo.title}</h1>
-            <h2 className="book-author">{book.volumeInfo.authors?.join(', ')}</h2>
-            <h3 className="book-year">
-              {book.volumeInfo.publishedDate
-                ? book.volumeInfo.publishedDate.substring(0, 4)
-                : ''}
-            </h3>
-            <h4 className="book-publisher">{book.volumeInfo.publisher}</h4>
-          </Grid>
-          <Grid className="mx-1"></Grid>
-        </Box>
-        <Box className="justify-content-center mt-4">
-          <Grid className="mx-1">
-            <p className="book-description">{book.volumeInfo.description} </p>
-          </Grid>
-        </Box>
+ return (
+  <Container maxWidth="md" sx={{ py: 4, backgroundColor: '#f5f5f5', borderRadius: 2, boxShadow: 3 }}>
+    <Grid container spacing={4} alignItems="flex-start">
+      {/* Portada a la izquierda */}
+      <Grid item xs={6} sm={4}>
+        <Box
+          component="img"
+          src={coverUrl}
+          alt={book.volumeInfo.title}
+          sx={{
+            height: 'auto',
+            borderRadius: 2,
+            boxShadow: 3,
+          }}
+        />
+      </Grid>
 
+      {/* Info a la derecha */}
+      <Grid item xs={6} sm={8}>
+        <Stack spacing={1}>
+          <Typography variant="h2" fontWeight={700}>
+            {book.volumeInfo.title}
+          </Typography>
 
+          {book.volumeInfo.authors && (
+            <Typography variant="subtitle1" color="text.secondary">
+              {book.volumeInfo.authors.join(', ')}
+            </Typography>
+          )}
 
-        <Box justifyContent="center" className="mx-2 mt-4">
-          <Stack
-            sx={{ gap: 2 }}
-            justifyContent={{ xs: 'center', md: 'start' }}
-            direction={{ xs: 'column', md: 'row' }}
-          >
+          {book.volumeInfo.publishedDate && (
+            <Typography variant="body2" color="text.secondary">
+              Año: {book.volumeInfo.publishedDate.substring(0, 4)}
+            </Typography>
+          )}
+
+          {book.volumeInfo.publisher && (
+            <Typography variant="body2" color="text.secondary">
+              Editorial: {book.volumeInfo.publisher}
+            </Typography>
+          )}
+          
+        </Stack>
+      </Grid>
+      <Grid item spacing={4} alignItems="flex-start">
+          <Stack direction="row" spacing={2} mt={2} justifyContent="center">
             <Button
               variant="contained"
               endIcon={<AddCircleIcon />}
               onClick={() =>
                 navigate('/add-book', {
-                  state: {
-                    book,
-                    coverUrl,
-                    mode: 'listing',
-                  },
+                  state: { book, coverUrl, mode: 'listing' },
                 })
               }
             >
-              Agregar a mi biblioteca
+              Mi biblioteca
             </Button>
-            <Button
-              variant="contained"
-              endIcon={<AddCircleIcon />}
-              onClick={handleAddToSearches}
-            >
-              Agregar a mis búsquedas
+
+            <Button variant="contained" endIcon={<AddCircleIcon />} onClick={handleAddToSearches}>
+              Mis búsquedas
             </Button>
           </Stack>
-        </Box>
-      </Container>
-    </>
-  )
+      </Grid>
+      
+
+      {/* Descripción abajo */}
+      {book.volumeInfo.description && (
+        <Grid item xs={12}>
+          <Typography variant="h6" gutterBottom>
+            Descripción
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ whiteSpace: 'pre-line' }}>
+            {book.volumeInfo.description}
+          </Typography>
+        </Grid>
+      )}
+    </Grid>
+  </Container>
+)
+
+
 }
 
 export default BookDetails

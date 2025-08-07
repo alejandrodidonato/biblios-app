@@ -551,7 +551,7 @@ const fetchSwaps = async () => {
         <CircularProgress />
       </Box>
     ) : swaps.length === 0 ? (
-      <Typography color="text.secondary">No tenés ofertas activas.</Typography>
+       <Typography color={appTheme.palette.primary.main} sx={{ textAlign: 'center' }}>No tenés ofertas activas.</Typography>
     ) : (
       <Stack spacing={2}>
         {swaps.map(swap => {
@@ -566,19 +566,22 @@ const fetchSwaps = async () => {
     : swap.match.listing.book
 
   return (
-    <Card key={swap.id} variant="outlined">
+    <Card key={swap.id} variant="outlined" sx={{ borderColor: appTheme.palette.primary.main }}>
       <CardContent>
         <Stack direction="row" spacing={2} alignItems="center">
           <Avatar variant="rounded" src={counterpartyBook?.thumbnail_url} sx={{ width: 48, height: 68 }} />
           <Box flex={1}>
-            <Typography fontWeight={600}>Intercambio con {counterpartyUser?.email || 'Usuario'}</Typography>
+            <Typography fontWeight={600}>Libro: {counterpartyBook?.title}</Typography>
             <Typography variant="body2" color="text.secondary">
-              Libro: {counterpartyBook?.title}
+              {counterpartyUser?.email || 'Usuario'}
             </Typography>
             <Typography variant="caption">
               Estado: {swap.status === 'countered' ? 'Contraoferta' : 'Pendiente'}
             </Typography>
           </Box>
+          
+        </Stack>
+        <Stack direction="row" alignContent="center" alignItems="center" justifyContent="center" mt={2}>
           <Button
             size="small"
             variant="outlined"
@@ -633,16 +636,18 @@ const fetchSwaps = async () => {
                     />
                     <Box flex={1}>
                       <Typography fontWeight={600}>
-                        Intercambio con {counterpartyUser?.email || 'Usuario'}
+                        Libro: {counterpartyBook?.title} 
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        Libro: {counterpartyBook?.title}
+                        {counterpartyUser?.email || 'Usuario'}
                       </Typography>
                       <Typography variant="caption">
                         Estado: Aceptado
                       </Typography>
                     </Box>
-                    <Stack spacing={1}>
+                    
+                  </Stack>
+                  <Stack spacing={1} direction="row" alignItems="center" justifyContent="center" mt={2}>
                       <Button
                         size="small"
                         variant="outlined"
@@ -653,14 +658,13 @@ const fetchSwaps = async () => {
                       <Button
                         size="small"
                         variant="contained"
-                        color="success"
+                        sx={{ backgroundColor: appTheme.palette.primary.main, color: 'white' }}
                         onClick={() => setSwapToConfirm(swap)}
                       >
                         Confirmar
                       </Button>
 
                     </Stack>
-                  </Stack>
                 </CardContent>
               </Card>
             )

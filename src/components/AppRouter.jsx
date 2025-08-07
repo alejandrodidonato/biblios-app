@@ -53,7 +53,7 @@ const AppRouter = () => {
         />
         <Route path='/' element={<ProtectedRoute>  <NavBar/> </ProtectedRoute>}>
                   
-                  <Route element={ <Home/> } />
+                  <Route path='/' element={ <Home/> } />
                 
                   <Route path='search' element={ <SearchBar /> }>
                     <Route path='list' element={ <Search /> } />
