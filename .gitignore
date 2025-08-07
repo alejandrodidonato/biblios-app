@@ -6,10 +6,6 @@ dist/
 build/
 .vscode/
 
-# Archivos de Vercel/Netlify
-.vercel/
-.netlify/
-
 # Logs y temporales
 npm-debug.log*
 yarn-debug.log*
