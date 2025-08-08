@@ -1,4 +1,3 @@
-// Matches.jsx
 import React, { useEffect, useState, useMemo } from 'react'
 import {
   Box,
@@ -158,7 +157,6 @@ useEffect(() => {
   useEffect(() => {
     if (!session?.user?.id) return
     fetchMatches()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session])
 
   const fetchMatches = async () => {
@@ -215,58 +213,14 @@ useEffect(() => {
     }
   }
 
-  const confirmSwap = async swap => {
+  const confirmSwap = async (swap) => {
   setLoadingConfirm(true)
   try {
-    const updates = []
+    const { error } = await supabaseClient.rpc('confirm_swap_tx', { p_swap_id: swap.id })
+    if (error) throw error
 
-    updates.push(
-      supabaseClient
-        .from('swaps')
-        .update({ status: 'completed', updated_at: new Date().toISOString() })
-        .eq('id', swap.id)
-    )
-
-    if (swap.offered_libris > 0) {
-      updates.push(
-        supabaseClient.rpc('decrease_libris', {
-          user_id_input: swap.from_user_id,
-          amount_input: swap.offered_libris,
-        })
-      )
-    }
-
-    const offeredBookIds = (swap.offered_books || []).map(b => b.listing_id)
-    if (offeredBookIds.length > 0) {
-      updates.push(
-        supabaseClient
-          .from('listings')
-          .update({ status: 'no disponible' })
-          .in('id', offeredBookIds)
-      )
-    }
-
-    updates.push(
-      supabaseClient
-        .from('listings')
-        .update({ status: 'no disponible' })
-        .eq('id', swap.target_listing_id)
-    )
-
-if (swap.match?.search?.id) {
-  updates.push(
-    supabaseClient
-      .from('searches')
-      .update({ active: false })
-      .eq('id', swap.match.search.id)
-  )
-}
-
-
-    console.log('Confirming swap with updates:', swap)
-
-    await Promise.all(updates)
-    fetchSwaps()
+    // refrescar
+    await fetchSwaps()
   } catch (error) {
     console.error('Error al confirmar intercambio:', error)
   } finally {
@@ -274,6 +228,7 @@ if (swap.match?.search?.id) {
     setLoadingConfirm(false)
   }
 }
+
 
 const fetchSwaps = async () => {
   try {
@@ -330,7 +285,6 @@ const fetchSwaps = async () => {
 }
 
 
-  // derivaciones con useMemo (siempre se llaman en el mismo orden)
   const searchMatches = useMemo(
     () => matches.filter(m => m.search_user_id === session?.user?.id),
     [matches, session]
@@ -554,7 +508,7 @@ const fetchSwaps = async () => {
        <Typography color={appTheme.palette.primary.main} sx={{ textAlign: 'center' }}>No tenés ofertas activas.</Typography>
     ) : (
       <Stack spacing={2}>
-        {swaps.map(swap => {
+        {swaps.filter(s => s.status !== 'accepted').map(swap => {
   const isSender = swap.from_user_id === session.user.id
 
   const counterpartyUser = isSender

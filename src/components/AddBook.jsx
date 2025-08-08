@@ -1,4 +1,4 @@
-// AddBook.jsx
+
 import React, { useEffect, useMemo } from 'react'
 import {
   TextField,
@@ -43,7 +43,7 @@ const schema = yup.object({
   coverUrl: yup.string().url('URL inválida').nullable(),
 })
 
-// helper para extraer el año de distintos formatos
+
 const extractYear = raw => {
   if (!raw) return ''
   const m = raw.match(/\d{4}/)
@@ -72,16 +72,6 @@ const normalizeGoogleBook = volume => {
 }
 
 
-
-/**
- * Props:
- *  - book: volumen de Google Books o normalizado
- *  - initialValues: override
- *  - onSubmit: async (data) => {}  // recibe payload con campos limpios
- *  - submitLabel
- *  - loading
- *  - mode: 'listing' | 'search'
- */
 const AddBook = ({
   book,
   initialValues = {},

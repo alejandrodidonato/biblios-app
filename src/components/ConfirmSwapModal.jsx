@@ -14,10 +14,10 @@ const ConfirmSwapModal = ({ open, onClose, onConfirm }) => {
       <DialogContent>
         <DialogContentText>
           ¿Estás seguro de que querés confirmar este intercambio? Una vez confirmado:
-          <ul>
-            <li>Se descontarán los Libris correspondientes.</li>
-            <li>Se eliminarán los libros ofrecidos y recibidos.</li>
-          </ul>
+          
+        <p>- Se descontarán los Libris correspondientes.</p>
+        <p>- Se eliminarán los libros ofrecidos y recibidos.</p>
+
           Esta acción no se puede deshacer.
         </DialogContentText>
       </DialogContent>

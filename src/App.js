@@ -17,7 +17,7 @@ function App() {
   return (
     <ThemeProvider theme={appTheme}>
       <CssBaseline />
-      <Container sx={{pb: {xs: '20vh', md: 0}}} > 
+      <Container sx={{ pb: {xs: '20vh', md: 0}, pt: {xs: 0, md: '10vh'} }} > 
        <SupabaseProvider>
         <AuthProvider>
           <ProfileProvider>

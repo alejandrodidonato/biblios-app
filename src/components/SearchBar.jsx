@@ -85,30 +85,7 @@ const SearchBar = () => {
                 <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>
             )}
             <Outlet />
-            <Box justifyContent="center" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
-              <Fab
-              variant="extended"
-              aria-label="add"
-              sx={{
-                borderRadius: 2,
-                position: 'fixed',
-                bottom: 120,
-                
-                zIndex: 1200,
-                padding: '5px 20px',
-                backgroundColor: appTheme.palette.primary.main,
-                color: '#ffffff',
-                '&:hover': {
-                  backgroundColor: appTheme.palette.primary.dark,
-                },
-              }}
-              onClick={() => navigate('/add-book')}
-            > 
-              
-              Cargar Libro
-              <AddCircleIcon sx={{ ml: 1 }} />
-            </Fab>
-             </Box>
+
         </>
     )
 }

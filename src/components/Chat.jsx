@@ -1,4 +1,4 @@
-// Chat.jsx
+
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import {
   Box,
@@ -20,7 +20,10 @@ import supabaseClient from '../supabase.js'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz'
 import { styled } from '@mui/material/styles'
-import Swap from './Swap' // ajustá el path si corresponde
+import Swap from './Swap'
+import { DialogTitle, DialogContent, DialogActions } from '@mui/material'
+import appTheme from '../theme.js'
+
 
 const MessageBubble = styled('div', {
   shouldForwardProp: prop => prop !== 'isOwn',
@@ -85,6 +88,18 @@ const Chat = () => {
   const [showSwap, setShowSwap] = useState(false)
   const [existingSwap, setExistingSwap] = useState(null)
   const [statusMessage, setStatusMessage] = useState(null)
+  const [modal, setModal] = useState({
+    open: false,
+    title: '',
+    message: '',
+    severity: 'info',
+  })
+
+const showModal = ({ title, message, severity = 'info' }) =>
+  setModal({ open: true, title, message, severity })
+
+const closeModal = () => setModal(m => ({ ...m, open: false }))
+
 
   // obtener sesión
   useEffect(() => {
@@ -256,12 +271,11 @@ if (!chatRes) {
     }
   }, [chatId])
 
-  // realtime swaps (ofertas) para este match
   useEffect(() => {
     if (!chatData?.match?.id) return
     const matchId = chatData.match.id
 
-    // cargar la swap existente inicial
+
     const fetchExisting = async () => {
       try {
         const { data: swapsData, error: swapsErr } = await supabaseClient
@@ -280,7 +294,6 @@ if (!chatRes) {
     }
     fetchExisting()
 
-    // suscripción real-time
     const channel = supabaseClient
       .channel(`public:swaps:match_id=eq.${matchId}`)
       .on(
@@ -298,7 +311,11 @@ if (!chatRes) {
             return { ...prev, ...updated }
           })
           if (session?.user?.id === updated.to_user_id) {
-            setStatusMessage('Tenés una nueva oferta / actualización pendiente')
+            showModal({
+            title: 'Actualización',
+            message: 'Tenés una nueva oferta / actualización pendiente.',
+            severity: 'info',
+          })
           }
         }
       )
@@ -385,14 +402,17 @@ if (!chatRes) {
     : null
 
   const handleExchange = () => {
-    if (isSearchOwner) {
-      setShowSwap(true)
-    } else {
-      alert('Vender tu libro por libris aún no está implementado aquí.')
-    }
+  if (isSearchOwner) {
+    setShowSwap(true)
+  } else {
+    showModal({
+      title: 'No disponible aquí',
+      message: 'Vender tu libro por libris aún no está implementado en este chat.',
+      severity: 'info',
+    })
   }
+}
 
-  // para mostrar oferta recibida si sos destinatario
   const isRecipient = existingSwap && session?.user?.id === existingSwap.to_user_id
   const isSender = existingSwap && session?.user?.id === existingSwap.from_user_id
 
@@ -408,11 +428,8 @@ if (!chatRes) {
           minHeight: '90vh',
         }}
       >
-        {statusMessage && (
-          <Alert severity="info" sx={{ position: 'sticky', top: 0, zIndex: 5 }}>
-            {statusMessage}
-          </Alert>
-        )}
+  
+
 
         {/* Header */}
         <Box
@@ -504,7 +521,9 @@ if (!chatRes) {
               .from('swaps')
               .update({ status: 'accepted', updated_at: new Date().toISOString() })
               .eq('id', existingSwap.id)
-            setStatusMessage('Oferta aceptada')
+
+            setExistingSwap(null)
+            showModal({ title: '¡Listo!', message: 'Oferta aceptada.', severity: 'success' })
           } catch (e) {
             console.error(e)
           }
@@ -512,6 +531,7 @@ if (!chatRes) {
       >
         Aceptar
       </Button>
+
       <Button
         variant="outlined"
         size="small"
@@ -521,7 +541,9 @@ if (!chatRes) {
               .from('swaps')
               .update({ status: 'rejected', updated_at: new Date().toISOString() })
               .eq('id', existingSwap.id)
-            setStatusMessage('Oferta rechazada')
+
+            setExistingSwap(null)
+            showModal({ title: 'Hecho', message: 'Oferta rechazada.', severity: 'info' })
           } catch (e) {
             console.error(e)
           }
@@ -529,11 +551,12 @@ if (!chatRes) {
       >
         Rechazar
       </Button>
+
     </Stack>
   </Box>
 )}
 
-        {/* Mensajes (sin autoscroll) */}
+        {/* Mensajes */}
         <Box
           sx={{
             flex: 1,
@@ -580,24 +603,27 @@ if (!chatRes) {
           })}
         </Box>
 
-        {/* Botón de intercambio encima del input */}
-        <Box sx={{ display: 'flex', justifyContent: 'center', px: 2, pt: 1, my: 1 }}>
-          <Fab
-            variant="extended"
-            color="primary"
-            onClick={handleExchange}
-            aria-label="realizar intercambio"
-            size="medium"
-            sx={{ borderRadius: 10, textTransform: 'none', fontWeight: 600 }}
-          >
-            <SwapHorizIcon sx={{ mr: 1 }} />
-            Realizar oferta
-          </Fab>
-        </Box>
+        {/* Botón de intercambio */}
+        {isSearchOwner && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', px: 2, pt: 1, my: 1 }}>
+            <Fab
+              variant="extended"
+              color="primary"
+              onClick={handleExchange}
+              aria-label="realizar intercambio"
+              size="medium"
+              sx={{ borderRadius: 10, textTransform: 'none', fontWeight: 600 }}
+            >
+              <SwapHorizIcon sx={{ mr: 1 }} />
+              Realizar oferta
+            </Fab>
+          </Box>
+        )}
+
 
  
 
-        {/* Input fijo abajo */}
+        {/* Input */}
         <Box
           component="form"
           onSubmit={handleSend}
@@ -634,7 +660,7 @@ if (!chatRes) {
         </Box>
       </Box>
 
-      {/* Swap modal */}
+      {/* Ofeerta modal */}
       <Dialog open={showSwap} onClose={() => setShowSwap(false)} fullWidth maxWidth="lg" scroll="paper">
         <Box sx={{ position: 'relative' }}>
           <IconButton aria-label="cerrar" onClick={() => setShowSwap(false)} sx={{ position: 'absolute', top: 8, right: 8 }}>
@@ -650,12 +676,34 @@ if (!chatRes) {
             onComplete={swapResult => {
               setShowSwap(false)
               if (swapResult) {
-                setStatusMessage('Oferta enviada / actualizada')
+                showModal({ title: '¡Listo!', message: 'Oferta enviada.', severity: 'success' })
+
               }
             }}
           />
         </Box>
       </Dialog>
+      <Dialog open={modal.open} onClose={closeModal} fullWidth maxWidth="xs">
+      {modal.title && <DialogTitle>{modal.title}</DialogTitle>}
+      <DialogContent>
+        <Alert
+          severity={modal.severity}
+          variant="outlined"
+          sx={{
+            color: appTheme.palette.primary.main,
+            borderColor: appTheme.palette.primary.main,
+            '& .MuiAlert-icon': {
+              color: appTheme.palette.primary.main,
+            },
+          }}
+        >
+          {modal.message}
+        </Alert>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={closeModal} autoFocus>OK</Button>
+      </DialogActions>
+    </Dialog>
     </>
   )
 }

@@ -1,9 +1,19 @@
-// AddBookPage.jsx
+
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import AddBook from './AddBook'
 import supabaseClient from '../supabase.js'
 import Loading from './Loading'
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Alert,
+  Button,
+} from '@mui/material'
+import appTheme from '../theme.js'
+
 
 const extractYear = val => {
   if (!val) return null
@@ -18,6 +28,18 @@ const AddBookPage = () => {
 
   const [session, setSession] = useState(null)
   const [loadingSession, setLoadingSession] = useState(true)
+  const [modal, setModal] = useState({
+  open: false,
+  title: '',
+  message: '',
+  severity: 'info',
+})
+
+const showModal = ({ title, message, severity = 'info' }) =>
+  setModal({ open: true, title, message, severity })
+
+const closeModal = () => setModal(m => ({ ...m, open: false }))
+
 
   const book = state?.book
   const coverUrl = state?.coverUrl || (book?.volumeInfo?.imageLinks?.thumbnail ?? '')
@@ -105,13 +127,19 @@ const AddBookPage = () => {
 
       if (listingError) throw listingError
 
-      // éxito
-      // podés reemplazar por un toast propio si tenés uno
-      alert('Libro publicado correctamente')
-      navigate('/profile')
+      
+      showModal({
+        title: '¡Listo!',
+        message: 'Libro publicado correctamente.',
+        severity: 'success',
+      })
     } catch (err) {
       console.error('Insert listing error:', err)
-      alert(err.message || 'Error al guardar')
+      showModal({
+      title: 'Ocurrió un error',
+      message: err?.message || 'Error al guardar.',
+      severity: 'error',
+    })
     }
   }
 
@@ -124,6 +152,33 @@ const AddBookPage = () => {
         onSubmit={handleSubmit}
         submitLabel={mode === 'listing' ? 'Publicar libro' : 'Guardar búsqueda'}
       />
+      <Dialog open={modal.open} onClose={closeModal} fullWidth maxWidth="xs">
+  {modal.title && <DialogTitle>{modal.title}</DialogTitle>}
+  <DialogContent>
+    <Alert
+      severity={modal.severity}
+      variant="outlined"
+      sx={{
+        '& .MuiAlert-icon': {
+          color: appTheme.palette.primary.main,
+        },
+      }}
+    >
+      {modal.message}
+    </Alert>
+  </DialogContent>
+  <DialogActions>
+    <Button
+      onClick={() => {
+        closeModal()
+        if (modal.severity === 'success') navigate('/profile')
+      }}
+      autoFocus
+    >
+      OK
+    </Button>
+  </DialogActions>
+</Dialog>
     </div>
   )
 }

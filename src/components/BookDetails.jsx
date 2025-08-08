@@ -1,13 +1,25 @@
-// BookDetails.jsx
+
 import React, { useEffect, useState } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
+import {
+  Stack,
+  Box,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Alert,
+} from '@mui/material'
 import Button from '@mui/material/Button'
-import { Stack, Box, Typography } from '@mui/material'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import supabaseClient from '../supabase.js'
 import Loading from './Loading'
+import appTheme from '../theme.js'
+
+
 
 const extractYear = raw => {
   if (!raw) return null
@@ -24,6 +36,19 @@ const BookDetails = () => {
   const [loadingSession, setLoadingSession] = useState(true)
   const [bookData, setBookData] = useState([]) // si lo tenés en un hook compartido podés reemplazar
   const [loading, setLoading] = useState(false)
+  const [modal, setModal] = useState({
+    open: false,
+    title: '',
+    message: '',
+    severity: 'info',
+  })
+
+  // helper para abrir/cerrar modal
+  const showModal = ({ title, message, severity = 'info' }) =>
+    setModal({ open: true, title, message, severity })
+
+  const closeModal = () => setModal(m => ({ ...m, open: false }))
+
 
   // Opción 1: Si viene por state (navegación normal)
   const book = location.state?.book || bookData.find(b => b.id === id)
@@ -91,7 +116,7 @@ const BookDetails = () => {
         title,
         authors,
         isbn: isbn || '',
-        published_year, // entero, p. ej. 2020
+        published_year,
         thumbnail_url,
       }
       const { data: inserted, error: insertErr } = await supabaseClient
@@ -107,47 +132,58 @@ const BookDetails = () => {
     return bookId
   }
 
-  const handleAddToSearches = async () => {
-    if (!user_id) {
-      alert('Tenés que estar logueado para guardar búsquedas')
+
+const handleAddToSearches = async () => {
+  if (!user_id) {
+    showModal({
+      title: 'Iniciá sesión',
+      message: 'Tenés que estar logueado para guardar búsquedas.',
+      severity: 'warning',
+    })
+    return
+  }
+
+  try {
+    const bookId = await ensureBookRecord(book)
+
+    const { data: existing, error: existingErr } = await supabaseClient
+      .from('searches')
+      .select('id')
+      .eq('user_id', user_id)
+      .eq('book_id', bookId)
+      .eq('active', true)
+      .limit(1)
+
+    if (existingErr) throw existingErr
+    if (existing?.length) {
+      showModal({
+        title: 'Ya está en tus búsquedas',
+        message: 'Ya tenés esa búsqueda activa.',
+        severity: 'info',
+      })
       return
     }
 
-    try {
-      // 1. Asegurar existencia del libro y obtener su id
-      const bookId = await ensureBookRecord(book)
+    const { error: insertSearchErr } = await supabaseClient.from('searches').insert([
+      { user_id, book_id: bookId },
+    ])
+    if (insertSearchErr) throw insertSearchErr
 
-      // 2. Verificar si ya hay una búsqueda activa
-      const { data: existing, error: existingErr } = await supabaseClient
-        .from('searches')
-        .select('id')
-        .eq('user_id', user_id)
-        .eq('book_id', bookId)
-        .eq('active', true)
-        .limit(1)
-
-      if (existingErr) throw existingErr
-      if (existing?.length) {
-        alert('Ya tenés esa búsqueda activa')
-        return
-      }
-
-      // 3. Insertar búsqueda
-      const { error: insertSearchErr } = await supabaseClient.from('searches').insert([
-        {
-          user_id,
-          book_id: bookId,
-        },
-      ])
-
-      if (insertSearchErr) throw insertSearchErr
-
-      alert('Búsqueda agregada correctamente')
-    } catch (err) {
-      console.error('Error agregando búsqueda:', err)
-      alert(err.message || 'Error al agregar la búsqueda')
-    }
+    showModal({
+      title: '¡Listo!',
+      message: 'Búsqueda agregada correctamente.',
+      severity: 'success',
+    })
+  } catch (err) {
+    console.error('Error agregando búsqueda:', err)
+    showModal({
+      title: 'Ocurrió un error',
+      message: err?.message || 'Error al agregar la búsqueda.',
+      severity: 'error',
+    })
   }
+}
+
 
  return (
   <Container maxWidth="md" sx={{ py: 4, backgroundColor: '#f5f5f5', borderRadius: 2, boxShadow: 3 }}>
@@ -226,6 +262,19 @@ const BookDetails = () => {
         </Grid>
       )}
     </Grid>
+    <Dialog open={modal.open} onClose={closeModal} fullWidth maxWidth="xs" >
+  {modal.title && <DialogTitle textAlign="center" sx={{ color: appTheme.palette.primary.dark }}>{modal.title}</DialogTitle>}
+  <DialogContent>
+    <Alert severity={modal.severity} variant="outlined" sx={{ borderColor: appTheme.palette.primary.main, '& .MuiAlert-icon': { color: appTheme.palette.primary.main }, '& .MuiAlert-message': {
+      color: appTheme.palette.primary.main, // verde oscuro custom
+    }, }}>
+      {modal.message}
+    </Alert>
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={closeModal} autoFocus>OK</Button>
+  </DialogActions>
+</Dialog>
   </Container>
 )
 

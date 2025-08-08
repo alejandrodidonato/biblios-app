@@ -22,20 +22,20 @@ const NavBar = () => {
     right: { xs: 0, md: 'auto' },
     bottom: { xs: 0, md: 'auto' },
     top: { xs: 'auto', md: 0 },
-    width: { xs: '100vw', md: '90px' },
-    height: { xs: '10vh', md: '100vh' },
+    width: { xs: '100vw', md: '100vw' },
+    height: { xs: '10vh', md: '10vh' },
     zIndex: 999,
     display: 'flex',
-    flexDirection: { xs: 'row', md: 'column' },
+    flexDirection: { xs: 'row' },
     alignItems: 'center',
-    justifyContent: { xs: 'center', md: 'flex-start' },
+    justifyContent: { xs: 'center' },
     backgroundColor: '#b5c69a',
   }
 
   const navigationStyles = {
     width: '100%',
     height: '100%',
-    flexDirection: { xs: 'row', md: 'column' },
+    flexDirection: { xs: 'row', md: 'row' },
     backgroundColor: 'transparent',
   }
 

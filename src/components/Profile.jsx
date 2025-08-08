@@ -16,9 +16,8 @@ const Profile = () => {
   const { logOut, loading } = useAuth();
   const navigate = useNavigate();
 
-  // Usa el contexto de perfil
   const { profile, refresh } = useProfile();
-  const [selectedTab, setSelectedTab] = useState(0); // 0: Mis libros, 1: Buscados
+  const [selectedTab, setSelectedTab] = useState(0);
   const { userBooks, userSearchedBooks } = useBook();
   const fallbackCover = '/img/default-book.png';
   
@@ -27,7 +26,6 @@ const Profile = () => {
     await logOut();
   };
 
-  // Si quieres refrescar el perfil al montar el componente:
   useEffect(() => {
     refresh();
   }, []);
@@ -47,7 +45,7 @@ const Profile = () => {
           </Grid>
           <Grid item xs={7} md={8} sx={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'space-around' }}>
             <Button
-              variant="outlined"
+              variant="outlined" disabled
               sx={{ backgroundColor: appTheme.palette.primary.white, color: appTheme.palette.primary.main, mb: { xs: 1, md: 0}, mr: { xs: 0, md: 1}, textTransform: 'none', fontWeight: 600 , fontSize: '1rem', minWidth: '120px'}}
               onClick={() => navigate('/editar-perfil')}
             >
@@ -55,7 +53,7 @@ const Profile = () => {
             </Button>
             <Button
               variant="outlined"
-              sx={{ backgroundColor: appTheme.palette.primary.white, textTransform: 'none', fontWeight: 600, color: appTheme.palette.primary.main, fontSize: '1rem', minWidth: '120px' }}
+              sx={{ backgroundColor: appTheme.palette.primary.white, color: appTheme.palette.primary.main, mb: { xs: 1, md: 0}, mr: { xs: 0, md: 1}, textTransform: 'none', fontWeight: 600 , fontSize: '1rem', minWidth: '120px'}}
               onClick={handleLogout}
             >
               Cerrar sesión
